@@ -1,22 +1,22 @@
 const hre = require('hardhat')
 const ethers = hre.ethers
-const greeterArtifacts = require('../artifacts/contracts/Greeter.sol/Greeter.json')
+const donationArtifacts = require('../artifacts/contracts/Donation.sol/Donation.json')
 
 
 async function main(){
     const[signer] = await ethers.getSigners()
-    const greeterAddr = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
+    const donationAddr = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
 
- const greeterContract = new ethers.Contract(
-     greeterAddr,
-     greeterArtifacts.abi,
-     signer
+ const donationContract = new ethers.Contract(
+    donationAddr,
+    donationArtifacts.abi,
+    signer
  )
     // const setGreetResult = await greeterContract.setGreet('Hello idiot!')
     // console.log(setGreetResult)
     // await setGreetResult.wait()
 
-    const result = await greeterContract.getGreet()
+    const result = await donationContract.getGreet()
     console.log(result)
 }
 

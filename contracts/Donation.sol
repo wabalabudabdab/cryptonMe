@@ -1,47 +1,70 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-
 import "hardhat/console.sol";
 
-
 contract Donation {
-    address payable public owner;
-    address[] public donators;
+//    string greet;
+//
+//
+//    function setGreet(string memory _greet) public {
+//        greet = _greet;
+//    }
+//
+//    function getGreet() public view returns (string memory) {
+//        return greet;
+//    }
 
+     // Some string type variables to identify the token.
+    // The `public` modifier makes a variable readable from outside the contract.
+    string public name = "My Hardhat Token";
+    string public symbol = "MHT";
+
+    // The fixed amount of tokens stored in an unsigned integer type variable.
+    uint256 public totalSupply = 1000000;
+
+    // An address type variable is used to store ethereum accounts.
+    address payable public owner;
+
+    // A mapping is a key/value map. Here we store each account balance.
+    mapping(address => uint256) balances;
+
+    /**
+     * Contract initialization.
+     *
+     * The `constructor` is executed only once when the contract is created.
+     */
     constructor() {
+        // The totalSupply is assigned to transaction sender, which is the account
+        // that is deploying the contract.
+        balances[msg.sender] = totalSupply;
         owner = payable(msg.sender);
     }
 
-    function gatherDonation() public payable {
-        require(msg.value >= .00001 ether);
-        donators.push(msg.sender);
+    /**
+     * A function to transfer tokens.
+     *
+     * The `external` modifier makes a function *only* callable from outside
+     * the contract.
+     */
+    function transfer(address to, uint256 amount) external {
+        // Check if the transaction sender has enough tokens.
+        // If `require`'s first argument evaluates to `false` then the
+        // transaction will revert.
+        require(balances[msg.sender] >= amount, "Not enough tokens");
+
+        // Transfer the amount.
+        balances[msg.sender] -= amount;
+        balances[to] += amount;
     }
 
-    function send (address payable receiver) public payable {
-        require(msg.sender == owner);
-        receiver.transfer(address(this).balance);
-
+    /**
+     * Read only function to retrieve the token balance of a given account.
+     *
+     * The `view` modifier indicates that it doesn't modify the contract's
+     * state, which allows us to call it without executing a transaction.
+     */
+    function balanceOf(address account) external view returns (uint256) {
+        return balances[account];
     }
-
-    function getBalance() public view returns(uint)
-    {
-        return address(this).balance;
-    }
-
-
-    // function transferToOwner() external{
-    //   require(msg.sender == owner);
-    //   owner.transfer(address(this).balance);
-    // }
-
-    function getDonators() public view returns (address[] memory){
-        return donators;
-    }
-    // функция transferToOwner необходима для вывода средств со счета фонда на счет вла-
-    // дельца. При этом средства со счета может перевести только владелец:
-    // require(msg.sender == owner);.
-    // Функция getDonators возвращает массив всех пожертвовавших. Таким образом получаем
-    // готовый смарт-контракт
-
 }

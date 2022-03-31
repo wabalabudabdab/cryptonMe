@@ -6,10 +6,10 @@ const ethers = hre.ethers
 async function main(){
     const[signer] = await ethers.getSigners()
 
-    const Greeter = await ethers.getContractFactory('Greeter', signer)
-    const greeter = await Greeter.deploy()
-    await greeter.deployed()
-    console.log(greeter.address)
+    const Donation = await ethers.getContractFactory('Donation', signer)
+    const donation = await Donation.deploy()
+    await donation.deployed()
+    console.log(donation.address)
 }
 //depack accounts writes in []
 
