@@ -5,7 +5,7 @@ const donationArtifacts = require('../artifacts/contracts/Donation.sol/Donation.
 
 async function main(){
     const[signer] = await ethers.getSigners()
-    const donationAddr = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
+    const donationAddr = '0x902D670D0699D7750715c60A28DBE86976D67a60'
 
  const donationContract = new ethers.Contract(
     donationAddr,

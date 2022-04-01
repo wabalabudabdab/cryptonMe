@@ -3,68 +3,22 @@ pragma solidity ^0.8.0;
 
 import "hardhat/console.sol";
 
-contract Donation {
-//    string greet;
-//
-//
-//    function setGreet(string memory _greet) public {
-//        greet = _greet;
-//    }
-//
-//    function getGreet() public view returns (string memory) {
-//        return greet;
-//    }
+contract Donation{
+    uint totalDonations; // the amount of donations
+    address payable owner; // contract creator's address
 
-     // Some string type variables to identify the token.
-    // The `public` modifier makes a variable readable from outside the contract.
-    string public name = "My Hardhat Token";
-    string public symbol = "MHT";
-
-    // The fixed amount of tokens stored in an unsigned integer type variable.
-    uint256 public totalSupply = 1000000;
-
-    // An address type variable is used to store ethereum accounts.
-    address payable public owner;
-
-    // A mapping is a key/value map. Here we store each account balance.
-    mapping(address => uint256) balances;
-
-    /**
-     * Contract initialization.
-     *
-     * The `constructor` is executed only once when the contract is created.
-     */
     constructor() {
-        // The totalSupply is assigned to transaction sender, which is the account
-        // that is deploying the contract.
-        balances[msg.sender] = totalSupply;
-        owner = payable(msg.sender);
+        owner = payable(msg.sender); // setting the contract creator
     }
 
-    /**
-     * A function to transfer tokens.
-     *
-     * The `external` modifier makes a function *only* callable from outside
-     * the contract.
-     */
-    function transfer(address to, uint256 amount) external {
-        // Check if the transaction sender has enough tokens.
-        // If `require`'s first argument evaluates to `false` then the
-        // transaction will revert.
-        require(balances[msg.sender] >= amount, "Not enough tokens");
-
-        // Transfer the amount.
-        balances[msg.sender] -= amount;
-        balances[to] += amount;
+    //public function to make donate
+    function donate() public payable {
+        (bool success,) = owner.call{value: msg.value}("");
+        require(success, "Failed to send money");
     }
 
-    /**
-     * Read only function to retrieve the token balance of a given account.
-     *
-     * The `view` modifier indicates that it doesn't modify the contract's
-     * state, which allows us to call it without executing a transaction.
-     */
-    function balanceOf(address account) external view returns (uint256) {
-        return balances[account];
+    // public function to return the amount of donations
+    function getTotalDonations() view public returns(uint) {
+        return totalDonations;
     }
 }
